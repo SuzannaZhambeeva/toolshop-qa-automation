@@ -59,7 +59,16 @@ pip install -r requirements.txt
 playwright install chromium
 ```
 
-### 4. Запустить тесты
+### 4. Настроить переменные окружения
+
+Скопировать шаблон адресов и учетных данных:
+
+```bash
+cp .env.example .env
+```
+
+
+### 5. Запустить тесты
 
 ```bash
 pytest                  # все тесты
