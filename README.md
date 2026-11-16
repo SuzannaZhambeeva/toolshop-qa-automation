@@ -76,6 +76,7 @@ pytest                  # все тесты
 pytest tests/api        # только API-тесты
 pytest tests/ui         # только UI-тесты
 pytest -m smoke         # только smoke-тесты
+pytest -m regression    # полный регресс
 ```
 
 ## Статус
