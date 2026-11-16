@@ -66,6 +66,7 @@ playwright install chromium
 ```bash
 cp .env.example .env
 ```
+Затем вписать в .env email и пароль тестового пользователя
 
 
 ### 5. Запустить тесты
