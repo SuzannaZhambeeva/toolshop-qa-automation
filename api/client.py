@@ -25,3 +25,10 @@ class ToolshopApi:
             },
             timeout=self.TIMEOUT
         )
+
+    def set_token(self, token):
+        self.session.headers.update({"Authorization": f"Bearer {token}"})
+
+    def get_me(self):
+        return self.session.get(f"{self.base_url}/users/me", timeout=self.TIMEOUT)
+    
