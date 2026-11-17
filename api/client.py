@@ -12,4 +12,16 @@ class ToolshopApi:
 
     def get_products(self):
         return self.session.get(f"{self.base_url}/products", timeout=self.TIMEOUT)
-    
+
+    def get_product(self, product_id):
+        return self.session.get(f"{self.base_url}/products/{product_id}", timeout=self.TIMEOUT)
+
+    def login(self, email, password):
+        return self.session.post(
+            f"{self.base_url}/users/login",
+            json={
+                "email": email,
+                "password": password,
+            },
+            timeout=self.TIMEOUT
+        )
