@@ -20,4 +20,10 @@ def test_get_product_by_id(api):
     assert actual_id == product_id, f"Ожидали id {product_id}, получили {actual_id}"
  
 
+@pytest.mark.regression
+def test_get_nonexistent_product_returns_404(api):
+    response = api.get_product("nonexistent123")
+    assert response.status_code == 404, f"Ожидали получить статус 404, получили {response.status_code}"
+    body = response.json()
+    assert body["message"] == "Requested item not found", f"Неожиданный текст ошибки: {body['message']}"
 
