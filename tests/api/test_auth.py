@@ -19,3 +19,15 @@ def test_login_with_wrong_password(api):
     body = response.json()
     assert body["error"] == "Unauthorized", f"Неожиданный текст ошибки: {body['error']}"
     assert "access_token" not in body, "Сервер выдал access_token при неверном пароле"
+
+
+@pytest.mark.smoke
+def test_get_me_with_token(auth_api):
+    response = auth_api.get_me()
+    assert response.status_code == 200, f"Ожидали получить статус 200, получили {response.status_code}"
+    body = response.json()
+    assert body["email"] == USER_EMAIL, f"Ожидали {USER_EMAIL}, получили {body['email']}"
+
+
+def test_get_me_without_token(auth_api):
+    
