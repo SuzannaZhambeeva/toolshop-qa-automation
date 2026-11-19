@@ -10,16 +10,7 @@ def test_login_with_valid_credentials(api):
     body = response.json()
     assert "access_token" in body, f"В ответе нет access_token, ключи: {list(body.keys())}"
     assert body["access_token"], "access_token пустой"
-
-
-@pytest.mark.regression
-def test_login_with_wrong_password(api):
-    response = api.login(USER_EMAIL, "wrong_password")
-    assert response.status_code == 401, f"Ожидали получить статус 401, получили {response.status_code}"
-    body = response.json()
-    assert body["error"] == "Unauthorized", f"Неожиданный текст ошибки: {body['error']}"
-    assert "access_token" not in body, "Сервер выдал access_token при неверном пароле"
-
+    
 
 @pytest.mark.smoke
 def test_get_me_with_token(auth_api):
@@ -35,4 +26,31 @@ def test_get_me_without_token(api):
     assert response.status_code == 401, f"Ожидали получить статус 401, получили {response.status_code}"
     body = response.json()
     assert body["message"] == "Unauthorized", f"Неожиданный текст ошибки: {body['message']}"
+
+
+@pytest.mark.regression
+@pytest.mark.parametrize(
+    "email, password, expected_error", 
+    [
+        (USER_EMAIL, "wrong_password", "Unauthorized"),
+        ("nobody@example.com", "wrong_password", "Unauthorized"),
+        ("", USER_PASSWORD, "Invalid login request"),
+        (USER_EMAIL, "", "Invalid login request"),
+        ("not-an-email", "wrong_password", "Unauthorized"),
+    ],
+    ids=[
+        "wrong_password",
+        "nonexistent_email",
+        "empty_email",
+        "empty_password",
+        "invalid_email_format",
+    ]
+)
+def test_login_with_invalid_credentials(api, email, password, expected_error):
+    response = api.login(email, password)
+    assert response.status_code == 401, f"Ожидали получить статус 401, получили {response.status_code}"
+    body = response.json()
+    assert body["error"] == expected_error, f"Неожиданный текст ошибки: {body['error']}"
+    assert "access_token" not in body, "Сервер выдал access_token при неверных данных"
+
 
