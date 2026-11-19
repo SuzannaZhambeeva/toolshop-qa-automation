@@ -1,4 +1,6 @@
 import pytest
+from jsonschema import validate
+from schemas.product import PRODUCT_SCHEMA
 
 
 @pytest.mark.smoke
@@ -39,3 +41,12 @@ def test_get_products_second_page(api):
     second_page_id = body["data"][0]["id"]
     assert second_page_id != first_page_id, f"Первая и вторая страницы начинаются с одного товара: {first_page_id}"
 
+
+@pytest.mark.regression
+def test_product_matches_schema(api):
+    products = api.get_products().json()["data"]
+    product_id = products[0]["id"]
+    response = api.get_product(product_id)
+    assert response.status_code == 200, f"Ожидали получить статус 200, получили {response.status_code}"
+    body = response.json()
+    validate(instance=body, schema=PRODUCT_SCHEMA)
