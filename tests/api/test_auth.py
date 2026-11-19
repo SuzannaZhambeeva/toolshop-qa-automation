@@ -29,5 +29,10 @@ def test_get_me_with_token(auth_api):
     assert body["email"] == USER_EMAIL, f"Ожидали {USER_EMAIL}, получили {body['email']}"
 
 
-def test_get_me_without_token(auth_api):
-    
+@pytest.mark.regression
+def test_get_me_without_token(api):
+    response = api.get_me()
+    assert response.status_code == 401, f"Ожидали получить статус 401, получили {response.status_code}"
+    body = response.json()
+    assert body["message"] == "Unauthorized", f"Неожиданный текст ошибки: {body['message']}"
+
