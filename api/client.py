@@ -10,8 +10,8 @@ class ToolshopApi:
         self.session = requests.Session()
         self.session.headers.update({"Accept": "application/json"})
 
-    def get_products(self):
-        return self.session.get(f"{self.base_url}/products", timeout=self.TIMEOUT)
+    def get_products(self, page=None):
+        return self.session.get(f"{self.base_url}/products", params={"page": page}, timeout=self.TIMEOUT)
 
     def get_product(self, product_id):
         return self.session.get(f"{self.base_url}/products/{product_id}", timeout=self.TIMEOUT)

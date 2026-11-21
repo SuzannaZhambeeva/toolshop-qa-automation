@@ -13,3 +13,10 @@ class HomePage:
         self.search_input.fill(product_name)
         self.search_button.click()
 
+    def open_product(self, product_name: str):
+        product = self.page.locator('a[data-test^="product-"]').filter(
+        has=self.page.get_by_text(product_name, exact=True)
+    )
+        product.click()
+
+
