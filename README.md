@@ -169,11 +169,14 @@ python -m pytest   # или запускать pytest через активны�
   `{"error": ...}` при логине и `{"message": ...}` при запросе профиля.
 - Запрос страницы за пределами диапазона возвращает `200` и пустой список.
 
-## Статус
+### Запустить отчет Allure
+Пример запуска тестов с формирование отчетов и скриншотов при падении тестов:
+```bash
+python -m pytest tests/ui -v --headed --browser chromium --slowmo 500 --alluredir=allure-results --clean-alluredir
+```
 
-- [x] Структура проекта и настройки через переменные окружения
-- [x] API-тесты (товары, схема, авторизация, негативные сценарии)
-- [ ] UI-тесты (Playwright, Page Object Model)
-- [ ] Гибридный тест API → UI
-- [ ] CI в GitHub Actions
-- [ ] Allure-отчёты
+Открыть отчет:
+```bash
+allure serve allure-results
+```
+

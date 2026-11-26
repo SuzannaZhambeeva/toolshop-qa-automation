@@ -1,9 +1,12 @@
 import pytest
+import allure
+
 from jsonschema import validate
 from schemas.product import PRODUCT_SCHEMA
 
 
 @pytest.mark.smoke
+@allure.title("Получение списка товаров")
 def test_get_products_returns_list(api):
     response = api.get_products()
     assert response.status_code == 200, f"Ожидали получить статус 200, получили {response.status_code}"
@@ -12,6 +15,7 @@ def test_get_products_returns_list(api):
 
 
 @pytest.mark.regression
+@allure.title("Получение товара по идентификатору")
 def test_get_product_by_id(api):
     products = api.get_products().json()["data"]
     product_id = products[0]["id"]
@@ -23,6 +27,7 @@ def test_get_product_by_id(api):
  
 
 @pytest.mark.regression
+@allure.title("Получение ошибки 404 при запросе несуществующего товара")
 def test_get_nonexistent_product_returns_404(api):
     response = api.get_product("nonexistent123")
     assert response.status_code == 404, f"Ожидали получить статус 404, получили {response.status_code}"
@@ -31,6 +36,7 @@ def test_get_nonexistent_product_returns_404(api):
 
 
 @pytest.mark.regression
+@allure.title("Получение второй страницы списка товаров")
 def test_get_products_second_page(api):
     first_page_products = api.get_products(page=1).json()["data"]
     first_page_id = first_page_products[0]["id"]
@@ -43,6 +49,7 @@ def test_get_products_second_page(api):
 
 
 @pytest.mark.regression
+@allure.title("Проверка соответствия товара JSON Schema")
 def test_product_matches_schema(api):
     products = api.get_products().json()["data"]
     product_id = products[0]["id"]

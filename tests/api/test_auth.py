@@ -1,9 +1,11 @@
 import pytest
+import allure
 
 from config.settings import USER_EMAIL, USER_PASSWORD
 
 
 @pytest.mark.smoke
+@allure.title("Успешная авторизация с корректными данными")
 def test_login_with_valid_credentials(api):
     response = api.login(USER_EMAIL, USER_PASSWORD)
     assert response.status_code == 200, f"Ожидали получить статус 200, получили {response.status_code}"
@@ -13,6 +15,7 @@ def test_login_with_valid_credentials(api):
     
 
 @pytest.mark.smoke
+@allure.title("Получение данных авторизованного пользователя")
 def test_get_me_with_token(auth_api):
     response = auth_api.get_me()
     assert response.status_code == 200, f"Ожидали получить статус 200, получили {response.status_code}"
@@ -21,6 +24,7 @@ def test_get_me_with_token(auth_api):
 
 
 @pytest.mark.regression
+@allure.title("Запрос данных пользователя без токена авторизации")
 def test_get_me_without_token(api):
     response = api.get_me()
     assert response.status_code == 401, f"Ожидали получить статус 401, получили {response.status_code}"
@@ -29,6 +33,7 @@ def test_get_me_without_token(api):
 
 
 @pytest.mark.regression
+@allure.title("Авторизация с некорректными данными: {param_id}")
 @pytest.mark.parametrize(
     "email, password, expected_error", 
     [
